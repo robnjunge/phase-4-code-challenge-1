@@ -1,12 +1,26 @@
-import { Switch, Route } from "react-router-dom";
-import Header from "./Header";
-import Hero from "./Hero";
-import Home from "./Home";
-import HeroPowerForm from "./HeroPowerForm";
-import Power from "./Power";
-import PowerEditForm from "./PowerEditForm";
+import React, { useEffect, useState } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import Header from './Header';
+import Hero from './Hero';
+import Home from './Home';
+import HeroPowerForm from './HeroPowerForm';
+import Power from './Power';
+import PowerEditForm from './PowerEditForm';
 
 function App() {
+  const [heroes, setHeroes] = useState([]);
+  const [powers, setPowers] = useState([]);
+
+  useEffect(() => {
+    fetch('/heroes')
+      .then((response) => response.json())
+      .then((data) => setHeroes(data));
+
+    fetch('/powers')
+      .then((response) => response.json())
+      .then((data) => setPowers(data));
+  }, []);
+
   return (
     <div>
       <Header />
@@ -16,16 +30,16 @@ function App() {
             <HeroPowerForm />
           </Route>
           <Route exact path="/powers/:id/edit">
-            <PowerEditForm />
+            <PowerEditForm powers={powers} />
           </Route>
           <Route exact path="/powers/:id">
-            <Power />
+            <Power powers={powers} />
           </Route>
           <Route exact path="/heroes/:id">
-            <Hero />
+            <Hero heroes={heroes} />
           </Route>
           <Route exact path="/">
-            <Home />
+            <Home heroes={heroes} />
           </Route>
         </Switch>
       </main>

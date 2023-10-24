@@ -10,17 +10,33 @@ import PowerEditForm from './PowerEditForm';
 function App() {
   const [heroes, setHeroes] = useState([]);
   const [powers, setPowers] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch heroes and powers when the component mounts
     fetch('http://localhost:5555/heroes')
-      .then((response) => response.json())
-      .then((data) => setHeroes(data));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => setHeroes(data))
+      .catch((err) => setError(err));
 
     fetch('http://localhost:5555/powers')
-      .then((response) => response.json())
-      .then((data) => setPowers(data));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => setPowers(data))
+      .catch((err) => setError(err));
   }, []);
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div>

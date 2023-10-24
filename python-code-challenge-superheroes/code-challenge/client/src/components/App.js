@@ -12,11 +12,12 @@ function App() {
   const [powers, setPowers] = useState([]);
 
   useEffect(() => {
-    fetch('/heroes')
+    // Fetch heroes and powers when the component mounts
+    fetch('http://localhost:5555/heroes')
       .then((response) => response.json())
       .then((data) => setHeroes(data));
 
-    fetch('/powers')
+    fetch('http://localhost:5555/powers')
       .then((response) => response.json())
       .then((data) => setPowers(data));
   }, []);
